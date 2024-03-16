@@ -51,9 +51,7 @@ public:
 	cGameManager();
 	~cGameManager();
 
-	void startGame();
-
-	weak_ptr<cPhysicsObject> GetProjectile();
+	void StartGame();
 
 	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();
 };

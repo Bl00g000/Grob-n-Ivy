@@ -17,7 +17,7 @@ cGameManager::cGameManager()
     m_gameText.setFillColor(sf::Color::White);
     m_gameText.setOrigin(0.f, 20.f);
 
-    startGame();
+    StartGame();
 }
 
 cGameManager::~cGameManager()
@@ -25,7 +25,7 @@ cGameManager::~cGameManager()
 }
 
 //  create box2Dworld and start the game
-void cGameManager::startGame()
+void cGameManager::StartGame()
 {
     shared_ptr<b2World> newBox2DWorld(new b2World(g_gravity));
     m_box2DWorld = newBox2DWorld;

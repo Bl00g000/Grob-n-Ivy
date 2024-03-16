@@ -55,6 +55,7 @@ cPhysicsObject::~cPhysicsObject()
 
 void cPhysicsObject::Tick()
 {
+
 }
 
 // draw the object to the game window

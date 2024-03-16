@@ -1,5 +1,6 @@
 #pragma once
 #include "cPhysicsObject.h"
+#include "cPlayerCharacter.h"
 #include "cMyContactListener.h"
 #include <vector>
 
@@ -34,6 +35,7 @@ private:
 
 	// Key Objects
 	vector<shared_ptr<cPhysicsObject>> m_physicsObjects;
+	vector<shared_ptr<cPlayerCharacter>> m_characters;
 
 	//States
 	eLevelState m_levelState = eLevelState::level1;
@@ -46,6 +48,7 @@ private:
 
 	// Create level border with indestructible walls
 	void CreateBorder();
+	void CreatePlayers();
 
 public:
 	cGameManager();

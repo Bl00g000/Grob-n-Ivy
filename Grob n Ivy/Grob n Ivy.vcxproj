@@ -158,12 +158,14 @@
     <ClCompile Include="cGameManager.cpp" />
     <ClCompile Include="cMyContactListener.cpp" />
     <ClCompile Include="cPhysicsObject.cpp" />
+    <ClCompile Include="cPlayerCharacter.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cGameManager.h" />
     <ClInclude Include="cMyContactListener.h" />
     <ClInclude Include="cPhysicsObject.h" />
+    <ClInclude Include="cPlayerCharacter.h" />
     <ClInclude Include="PhysicsLibrary.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

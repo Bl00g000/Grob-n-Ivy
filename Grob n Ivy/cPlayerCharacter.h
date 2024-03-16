@@ -14,7 +14,7 @@ private:
 		sf::Color::Yellow
 	};
 
-	cPhysicsObject m_interactingObject;
+	cPhysicsObject* m_interactingObject;
 
 public:
 	using cPhysicsObject::cPhysicsObject;
@@ -23,7 +23,7 @@ public:
 	void Tick() override;
 	void Initialize(bool _bPlayer1, bool _bIsKeyboard);
 
-	void ProcessMovement(sf::Event _event);
+	void ProcessMovement();
 	void Interact();
 	void CycleColor();
 };

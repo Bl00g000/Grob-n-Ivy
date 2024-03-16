@@ -59,35 +59,47 @@ void cGameManager::Tick()
     {
         switch (event.type)
         {
-	        case sf::Event::Closed:
-	        {
-                m_window->close();
-	            break;
-	        }
-	        case sf::Event::Resized:
-	        {
-	            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-	            m_window->setView(sf::View(visibleArea));
-	        }
-        }
-
-        m_window->clear();
-
-        for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+        case sf::Event::Closed:
         {
-            physicsObjIter->Draw(*m_window);
-        }
-
-        //m_player1->Draw(*m_window);
-
-        //Finally, display the window.
-        m_window->display();
-
-        if (m_flagForClose)
-        {
-            m_levelState = eLevelState::ClosingGame;
             m_window->close();
+            break;
         }
+        case sf::Event::Resized:
+        {
+            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+            m_window->setView(sf::View(visibleArea));
+        }
+        case sf::Event::KeyPressed:
+        {
+            for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+            {
+                characterIter->ProcessMovement();
+            }
+        }
+        }
+    }
+
+    m_window->clear();
+
+    for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+    {
+        physicsObjIter->Draw(*m_window);
+    }
+
+    for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+    {
+        characterIter->Draw(*m_window);
+    }
+
+    //m_player1->Draw(*m_window);
+
+    //Finally, display the window.
+    m_window->display();
+
+    if (m_flagForClose)
+    {
+        m_levelState = eLevelState::ClosingGame;
+        m_window->close();
     }
 }
 
@@ -141,29 +153,29 @@ void cGameManager::CreatePlayers()
     // THIS IS MEANT TO WORK BUT ITS GIVING NO DEFAULT CONSTRUCTOR ERROR FOR CPHYSICSOBJECT
     // AND IDK WHY BECAUSE THIS IS HOW WE CREATED EVERYTHING IN ANGY BOIDS PROJECT
 
-    //shared_ptr<cPlayerCharacter> newPlayer1(new cPlayerCharacter(this,
-    //    b2Shape::Type::e_polygon,
-    //    m_box2DWorld,
-    //    sf::Vector2f(1.f, 1.f),
-    //    sf::Vector2f(5.f, 5.f),
-    //    0.0f,
-    //    b2BodyType::b2_dynamicBody,
-    //    &m_groundSprite));
-    //
-    //newPlayer1->Initialize(true, true);
-    //m_characters.push_back(newPlayer1);
-    //
-    //shared_ptr<cPlayerCharacter> newPlayer2(new cPlayerCharacter(this,
-    //    b2Shape::Type::e_polygon,
-    //    m_box2DWorld,
-    //    sf::Vector2f(1.f, 1.f),
-    //    sf::Vector2f(10.f, 5.f),
-    //    0.0f,
-    //    b2BodyType::b2_dynamicBody,
-    //    &m_groundSprite));
-    //
-    //newPlayer2->Initialize(false, true);
-    //m_characters.push_back(newPlayer2);
+    shared_ptr<cPlayerCharacter> newPlayer1(new cPlayerCharacter(this,
+        b2Shape::Type::e_polygon,
+        m_box2DWorld,
+        sf::Vector2f(1.f, 1.f),
+        sf::Vector2f(5.f, 5.f),
+        0.0f,
+        b2BodyType::b2_dynamicBody,
+        &m_groundSprite));
+    
+    newPlayer1->Initialize(true, true);
+    m_characters.push_back(newPlayer1);
+    
+    shared_ptr<cPlayerCharacter> newPlayer2(new cPlayerCharacter(this,
+        b2Shape::Type::e_polygon,
+        m_box2DWorld,
+        sf::Vector2f(1.f, 1.f),
+        sf::Vector2f(10.f, 5.f),
+        0.0f,
+        b2BodyType::b2_dynamicBody,
+        &m_groundSprite));
+    
+    newPlayer2->Initialize(false, true);
+    m_characters.push_back(newPlayer2);
 }
 
 //  returns all physics objects

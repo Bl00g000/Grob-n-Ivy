@@ -21,6 +21,7 @@ protected:
 	bool m_bHasCollided = false;
 
 public:
+	cPhysicsObject();
 	cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, std::shared_ptr<b2World> _box2DWorld,
 		sf::Vector2f _size, sf::Vector2f _position, float _rotation, 
 		b2BodyType _bodyType, sf::Sprite* _sprite, int16 _filterGroup = 0);

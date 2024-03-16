@@ -1,5 +1,7 @@
 #include "cPlayerCharacter.h"
 
+#include <iostream>
+
 cPlayerCharacter::~cPlayerCharacter()
 {
 
@@ -8,8 +10,7 @@ cPlayerCharacter::~cPlayerCharacter()
 void cPlayerCharacter::Tick()
 {
 	cPhysicsObject::Tick();
-
-
+	
 }
 
 void cPlayerCharacter::Initialize(bool _bPlayer1, bool _bIsKeyboard)
@@ -28,53 +29,51 @@ void cPlayerCharacter::Initialize(bool _bPlayer1, bool _bIsKeyboard)
 	}
 }
 
-void cPlayerCharacter::ProcessMovement(sf::Event _event)
+void cPlayerCharacter::ProcessMovement()
 {
 	if (m_bIsKeyboard)
 	{
-		if (_event.type == sf::Event::KeyPressed)
+		if (m_bPlayer1)		// PLAYER 1 MOVEMENT CONTROLS
 		{
-			if (m_bPlayer1)		// PLAYER 1 MOVEMENT CONTROLS
+			// Move right
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				// Move right
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-				{
-					m_b2Body->ApplyForceToCenter(b2Vec2(1.0f, 0.0f), true);
-				}
-
-				// Move left
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-				{
-					m_b2Body->ApplyForceToCenter(b2Vec2(-1.0f, 0.0f), true);
-				}
-
-				// Jump
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-				{
-					m_b2Body->ApplyForceToCenter(b2Vec2(0.0f, 3.0f), true);
-				}
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
 			}
-			else				// PLAYER 2 MOVEMENT CONTROLS
+
+			// Move left
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				// Move right
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-				{
-					m_b2Body->ApplyForceToCenter(b2Vec2(1.0f, 0.0f), true);
-				}
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+			}
 
-				// Move left
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-				{
-					m_b2Body->ApplyForceToCenter(b2Vec2(-1.0f, 0.0f), true);
-				}
-
-				// Jump
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-				{
-					m_b2Body->ApplyForceToCenter(b2Vec2(0.0f, 3.0f), true);
-				}
+			// Jump
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			{
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, 10.0f), true);
 			}
 		}
+		else				// PLAYER 2 MOVEMENT CONTROLS
+		{
+			// Move right
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			{
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+			}
+
+			// Move left
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			{
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+			}
+
+			// Jump
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			{
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, 10.0f), true);
+			}
+		}
+	
 	}
 }
 

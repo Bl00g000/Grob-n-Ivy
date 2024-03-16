@@ -156,12 +156,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cGameManager.cpp" />
+    <ClCompile Include="cLevelLoader.cpp" />
     <ClCompile Include="cMyContactListener.cpp" />
     <ClCompile Include="cPhysicsObject.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cGameManager.h" />
+    <ClInclude Include="cLevelLoader.h" />
     <ClInclude Include="cMyContactListener.h" />
     <ClInclude Include="cPhysicsObject.h" />
     <ClInclude Include="PhysicsLibrary.h" />

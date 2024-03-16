@@ -3,7 +3,7 @@
 #include "box2d/box2d.h"
 
 // Size in pixels of a single box2D meter
-const inline float g_sizeScale = 30.f;
+const inline float g_sizeScale = 32.f;
 
 // Movement scale in pixels of a box2D meter
 const inline float g_moveScale = 30.0f;

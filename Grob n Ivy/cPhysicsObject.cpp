@@ -28,8 +28,8 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 		fixtureDef.shape = &circleShape;
 		break;
 	case b2Shape::e_polygon:
+
 		// Create box using poly shape
-		
 		polyShape.SetAsBox(m_v2fSize.x / 2 / g_moveScale, m_v2fSize.y / 2 / g_moveScale);
 		fixtureDef.shape = &polyShape;
 		break;

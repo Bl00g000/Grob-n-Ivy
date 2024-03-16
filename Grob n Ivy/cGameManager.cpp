@@ -1,4 +1,5 @@
 #include "cGameManager.h"
+#include "cLevelLoader.h"
 
 cGameManager::cGameManager()
 {
@@ -7,7 +8,7 @@ cGameManager::cGameManager()
     m_window->setFramerateLimit(60);
 
     sf::Texture groundTex;
-    groundTex.loadFromFile("Sprites/ground.png");
+    groundTex.loadFromFile("Sprites/plank.png");
     
     m_groundSprite.setTexture(groundTex);
 
@@ -35,8 +36,8 @@ void cGameManager::startGame()
 
     m_box2DWorld->SetContactListener(m_contactListener.get());
 
-    // Create our first level here
-    CreateBorder();
+    m_levelLoader = new cLevelLoader("Level0", this, m_box2DWorld);
+    m_levelLoader->BuildLevel(&m_physicsObjects);
 
     //This is the drawing section for SFML.
     while (m_window->isOpen())
@@ -71,6 +72,7 @@ void cGameManager::Tick()
 
         m_window->clear();
 
+
         for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
         {
             physicsObjIter->Draw(*m_window);
@@ -85,51 +87,6 @@ void cGameManager::Tick()
             m_window->close();
         }
     }
-}
-
-// creates the level border which consists of 2 walls a ceiling and 1 ground object
-void cGameManager::CreateBorder()
-{
-    shared_ptr<cPhysicsObject> newGroundObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(43.f, 1.f),            // Size
-        sf::Vector2f(21.3f, 23.5f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
-    m_groundObject = newGroundObject;
-    m_physicsObjects.push_back(newGroundObject);
-
-    shared_ptr<cPhysicsObject> RoofObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(43.f, 1.f),            // Size
-        sf::Vector2f(21.3f, 0.f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
-    m_physicsObjects.push_back(RoofObject);
-
-    shared_ptr<cPhysicsObject> rightWallObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(1.f, 43.f),            // Size
-        sf::Vector2f(42.6f, 12.f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
-    m_physicsObjects.push_back(rightWallObject);
-
-    shared_ptr<cPhysicsObject> leftWallObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(1.f, 43.f),            // Size
-        sf::Vector2f(0.f, 12.f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
-    m_physicsObjects.push_back(leftWallObject);
 }
 
 //  returns all physics objects

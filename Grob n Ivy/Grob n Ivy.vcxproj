@@ -22,9 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{0b5e8e48-7aa9-4ea4-83b0-7950ffc906f5}</ProjectGuid>
-    <RootNamespace>PhysicsProject</RootNamespace>
+    <RootNamespace>Grob n Ivy</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>PhysicsProject</ProjectName>
+    <ProjectName>Grob n Ivy</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

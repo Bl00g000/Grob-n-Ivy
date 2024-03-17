@@ -1,5 +1,6 @@
 #pragma once
 #include "cPhysicsObject.h"
+#include "cInteractable.h"
 
 class cPlayerCharacter : public cPhysicsObject
 {
@@ -15,7 +16,8 @@ private:
 	};
 	std::vector<sf::Texture> m_allTextures;
 
-	cPhysicsObject* m_interactingObject;
+	bool m_bCanInteract = true;
+	cInteractable* m_interactableObject;
 
 public:
 	using cPhysicsObject::cPhysicsObject;
@@ -25,7 +27,14 @@ public:
 	void Initialize(bool _bPlayer1, bool _bIsKeyboard);
 
 	void ProcessMovement();
-	void Interact();
+	void Interact(sf::Event _event);
 	void CycleColor(sf::Event _event);
 	void ChangeColor(int _iColorIndex);
+
+	// Setter
+	void SetInteractableObject(cInteractable* _itrObj);
+
+	// Getters
+	bool IsPlayer1();
+	bool CanInteract();
 };

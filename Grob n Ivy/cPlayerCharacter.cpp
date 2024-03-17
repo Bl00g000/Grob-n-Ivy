@@ -4,7 +4,7 @@
 
 cPlayerCharacter::~cPlayerCharacter()
 {
-	delete m_interactingObject;
+	delete m_interactableObject;
 }
 
 void cPlayerCharacter::Tick()
@@ -37,6 +37,9 @@ void cPlayerCharacter::Initialize(bool _bPlayer1, bool _bIsKeyboard)
 	{
 		ChangeColor(1);
 	}
+
+	m_bCanInteract = true;
+	m_interactableObject = nullptr;
 }
 
 void cPlayerCharacter::ProcessMovement()
@@ -60,7 +63,7 @@ void cPlayerCharacter::ProcessMovement()
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, 10.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -2.0f), true);
 			}
 		}
 		else				// PLAYER 2 MOVEMENT CONTROLS
@@ -80,21 +83,33 @@ void cPlayerCharacter::ProcessMovement()
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, 10.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -2.0f), true);
 			}
 		}
 	}
 }
 
-void cPlayerCharacter::Interact()
+void cPlayerCharacter::Interact(sf::Event _event)
 {
-
-}
-
-void cPlayerCharacter::ChangeColor(int _iColorIndex)
-{
-	m_currentColor = m_allColors[_iColorIndex];
-	m_Sprite->setTexture(m_allTextures[_iColorIndex]);
+	if (m_bIsKeyboard)
+	{
+		if (m_bPlayer1)
+		{
+			if (_event.key.code == sf::Keyboard::Q)
+			{
+				// would need to do a check here first
+				// to see if the player is already interacting with something
+			}
+		}
+		else
+		{
+			if (_event.key.code == sf::Keyboard::RControl)
+			{
+				// would need to do a check here first
+				// to see if the player is already interacting with something
+			}
+		}
+	}
 }
 
 void cPlayerCharacter::CycleColor(sf::Event _event)
@@ -142,4 +157,25 @@ void cPlayerCharacter::CycleColor(sf::Event _event)
 			}
 		}
 	}
+}
+
+bool cPlayerCharacter::IsPlayer1()
+{
+	return m_bPlayer1;
+}
+
+bool cPlayerCharacter::CanInteract()
+{
+	return m_bCanInteract;
+}
+
+void cPlayerCharacter::ChangeColor(int _iColorIndex)
+{
+	m_currentColor = m_allColors[_iColorIndex];
+	m_Sprite->setTexture(m_allTextures[_iColorIndex]);
+}
+
+void cPlayerCharacter::SetInteractableObject(cInteractable* _itrObj)
+{
+	m_interactableObject = _itrObj;
 }

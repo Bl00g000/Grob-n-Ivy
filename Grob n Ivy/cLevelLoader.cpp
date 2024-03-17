@@ -139,7 +139,7 @@ void cLevelLoader::CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vect
 		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
 		break;
 	case ObjectType::tileTest:
-		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
+		CreateInteractablePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
 		break;
 	}
 }
@@ -162,6 +162,26 @@ void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileTy
 		_sprite, 1));								   	// Sprite
 
 	_physicsObject->push_back(testTile);
+}
+
+// Name: LoadSprites
+// Author: Juan
+// Parameters: N/A
+// Returns: Void
+// Purpose: Creates a 1x1 (times the game scale size) physics object
+void cLevelLoader::CreateInteractablePhysicsObject(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite)
+{
+	shared_ptr<cInteractable> testInteractable(new cInteractable(gameManagerRef,
+		b2Shape::Type::e_polygon,
+		b2WorldRef,
+		sf::Vector2f(1.f, 1.f),				  	// Size
+		_pos + sf::Vector2f(.5f, .5f),         	// Position
+		0,
+		b2BodyType::b2_staticBody,				   	// Body type
+		_tileType,
+		_sprite));								   	// Sprite
+
+	_physicsObject->push_back(testInteractable);
 }
 
 // Name: LoadSprites

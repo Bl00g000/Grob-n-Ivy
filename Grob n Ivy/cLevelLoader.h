@@ -39,6 +39,9 @@ public:
 	void CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject);
 	void CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileType,
 	                             std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite);
+	void CreateInteractablePhysicsObject(sf::Vector2f _pos, ObjectType _tileType,
+	                                     std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject,
+	                                     sf::Sprite* _sprite);
 
 	// Loading all required sprites and textures
 	void LoadSprites();

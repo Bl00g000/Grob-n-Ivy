@@ -41,6 +41,7 @@ private:
 
 	// Key Objects
 	vector<shared_ptr<cPhysicsObject>> m_physicsObjects;
+	vector<shared_ptr<cInteractable>> m_interactables;
 	vector<shared_ptr<cPlayerCharacter>> m_characters;
 
 	//States
@@ -63,5 +64,6 @@ public:
 	void StartGame();
 
 	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();
+	vector<shared_ptr<cPlayerCharacter>> GetPlayerCharacters();
 };
 

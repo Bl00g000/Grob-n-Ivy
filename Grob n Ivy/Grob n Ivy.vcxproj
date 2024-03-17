@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cGameManager.cpp" />
+    <ClCompile Include="cInteractable.cpp" />
     <ClCompile Include="cLevelLoader.cpp" />
     <ClCompile Include="cMyContactListener.cpp" />
     <ClCompile Include="cPhysicsObject.cpp" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cGameManager.h" />
+    <ClInclude Include="cInteractable.h" />
     <ClInclude Include="cLevelLoader.h" />
     <ClInclude Include="cMyContactListener.h" />
     <ClInclude Include="cPhysicsObject.h" />

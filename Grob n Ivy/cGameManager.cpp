@@ -1,15 +1,24 @@
 #include "cGameManager.h"
 
+#include <iostream>
+
 cGameManager::cGameManager()
 {
     //Creates an SFML window at a desired resolution.
     m_window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML and Box2D");
     m_window->setFramerateLimit(60);
 
+    // Set sprite textures
     sf::Texture groundTex;
     groundTex.loadFromFile("Sprites/plank.png");
-    
-    m_groundSprite.setTexture(groundTex);
+    m_sprGround.setTexture(groundTex);
+
+    sf::Texture playerTex;
+    playerTex.loadFromFile("Sprites/Red.png");
+    m_sprPlayer1.setTexture(playerTex);
+    playerTex.loadFromFile("Sprites/Blue.png");
+    m_sprPlayer2.setTexture(playerTex);
+
 
     m_gameFont.loadFromFile("Fonts/arial.ttf");
     m_gameText.setFont(m_gameFont);
@@ -38,6 +47,7 @@ void cGameManager::StartGame()
     // Create our first level here
     CreateBorder();
     CreatePlayers();
+    m_window->setKeyRepeatEnabled(false);
 
     //This is the drawing section for SFML.
     while (m_window->isOpen())
@@ -61,7 +71,7 @@ void cGameManager::Tick()
         {
         case sf::Event::Closed:
         {
-            m_window->close();
+            m_window->close();  // THIS IS FOR TESTING ITS ACTUALLY IN FLAGFORCLOSE
             break;
         }
         case sf::Event::Resized:
@@ -73,10 +83,19 @@ void cGameManager::Tick()
         {
             for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
             {
-                characterIter->ProcessMovement();
+                characterIter->CycleColor(event);
+
+                // add interact code here too
             }
         }
         }
+    }
+
+    // Process character movement
+    // This is not event-based hence why its not in the event loop
+    for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+    {
+        characterIter->ProcessMovement();
     }
 
     m_window->clear();
@@ -113,7 +132,7 @@ void cGameManager::CreateBorder()
         sf::Vector2f(21.3f, 22.0f),           // Position
         180,
         b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
+        &m_sprGround));                         // Sprite
     m_groundObject = newGroundObject;
     m_physicsObjects.push_back(newGroundObject);
 
@@ -124,7 +143,7 @@ void cGameManager::CreateBorder()
         sf::Vector2f(21.3f, 0.f),           // Position
         180,
         b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
+        &m_sprGround));                         // Sprite
     m_physicsObjects.push_back(RoofObject);
 
     shared_ptr<cPhysicsObject> rightWallObject(new cPhysicsObject(this,
@@ -134,7 +153,7 @@ void cGameManager::CreateBorder()
         sf::Vector2f(40.f, 12.f),           // Position
         180,
         b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
+        &m_sprGround));                         // Sprite
     m_physicsObjects.push_back(rightWallObject);
 
     shared_ptr<cPhysicsObject> leftWallObject(new cPhysicsObject(this,
@@ -144,15 +163,12 @@ void cGameManager::CreateBorder()
         sf::Vector2f(0.f, 12.f),           // Position
         180,
         b2BodyType::b2_staticBody,               // Body Type
-        &m_groundSprite));                         // Sprite
+        &m_sprGround));                         // Sprite
     m_physicsObjects.push_back(leftWallObject);
 }
 
 void cGameManager::CreatePlayers()
 {
-    // THIS IS MEANT TO WORK BUT ITS GIVING NO DEFAULT CONSTRUCTOR ERROR FOR CPHYSICSOBJECT
-    // AND IDK WHY BECAUSE THIS IS HOW WE CREATED EVERYTHING IN ANGY BOIDS PROJECT
-
     shared_ptr<cPlayerCharacter> newPlayer1(new cPlayerCharacter(this,
         b2Shape::Type::e_polygon,
         m_box2DWorld,
@@ -160,7 +176,7 @@ void cGameManager::CreatePlayers()
         sf::Vector2f(5.f, 5.f),
         0.0f,
         b2BodyType::b2_dynamicBody,
-        &m_groundSprite));
+        &m_sprPlayer1));
     
     newPlayer1->Initialize(true, true);
     m_characters.push_back(newPlayer1);
@@ -172,7 +188,7 @@ void cGameManager::CreatePlayers()
         sf::Vector2f(10.f, 5.f),
         0.0f,
         b2BodyType::b2_dynamicBody,
-        &m_groundSprite));
+        &m_sprPlayer2));
     
     newPlayer2->Initialize(false, true);
     m_characters.push_back(newPlayer2);

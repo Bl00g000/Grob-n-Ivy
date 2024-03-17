@@ -19,12 +19,13 @@ private:
 
 public:
 	using cPhysicsObject::cPhysicsObject;
-	~cPlayerCharacter();
+	~cPlayerCharacter() override;
 
 	void Tick() override;
 	void Initialize(bool _bPlayer1, bool _bIsKeyboard);
 
 	void ProcessMovement();
 	void Interact();
-	void CycleColor();
+	void CycleColor(sf::Event _event);
+	void ChangeColor(int _iColorIndex);
 };

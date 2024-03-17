@@ -26,7 +26,9 @@ private:
 	bool m_flagForClose = false;
 
 	// Sprites
-	sf::Sprite m_groundSprite;
+	sf::Sprite m_sprGround;
+	sf::Sprite m_sprPlayer1;
+	sf::Sprite m_sprPlayer2;
 
 	// Box2D
 	shared_ptr<b2World> m_box2DWorld;

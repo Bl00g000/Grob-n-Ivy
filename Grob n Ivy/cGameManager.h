@@ -52,7 +52,7 @@ private:
 public:
 	cGameManager();
 	~cGameManager();
-
+  
 	void startGame();
 
 	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();

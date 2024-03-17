@@ -84,7 +84,6 @@ void cGameManager::Tick()
             m_window->setView(sf::View(visibleArea));
         }
         case sf::Event::KeyPressed:
-
         {
             for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
             {
@@ -112,6 +111,13 @@ void cGameManager::Tick()
                 }
 	        }
         }
+        case sf::Event::KeyReleased:
+	    {
+            for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+            {
+                characterIter->StopMovement(event);
+            }
+	    }
         }
     }
   
@@ -198,7 +204,7 @@ void cGameManager::CreatePlayers()
         &m_sprPlayer1,
         -1,
         ObjectType::none,
-        0.5f, 0.f, true)); // friction/bounciness/fixedRotation
+        0.0f, 0.f, true)); // friction/bounciness/fixedRotation
     
     newPlayer1->Initialize(true, true);
     m_characters.push_back(newPlayer1);
@@ -213,7 +219,7 @@ void cGameManager::CreatePlayers()
         &m_sprPlayer2, 
         -1,
         ObjectType::none,
-        0.5f, 0.f, true)); // friction/bounciness/fixedRotation));
+        0.0f, 0.f, true)); // friction/bounciness/fixedRotation));
     
     newPlayer2->Initialize(false, true);
     m_characters.push_back(newPlayer2);

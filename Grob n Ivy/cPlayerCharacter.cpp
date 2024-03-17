@@ -48,13 +48,14 @@ void cPlayerCharacter::ProcessMovement()
 			// Move right
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(10.0f, 0.0f));
 			}
 
 			// Move left
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(-10.0f, 0.0f));
 			}
 
 			// Jump
@@ -68,13 +69,15 @@ void cPlayerCharacter::ProcessMovement()
 			// Move right
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(10.0f, 0.0f));
 			}
 
 			// Move left
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(-10.0f, 0.0f));
 			}
 
 			// Jump
@@ -84,6 +87,28 @@ void cPlayerCharacter::ProcessMovement()
 			}
 		}
 	}
+}
+
+void cPlayerCharacter::StopMovement(sf::Event _event)
+{
+	if (m_bIsKeyboard)
+	{
+		if (m_bPlayer1)
+		{
+			if (_event.key.code == sf::Keyboard::A || _event.key.code == sf::Keyboard::D)
+			{
+				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			}
+		}
+		else
+		{
+			if (_event.key.code == sf::Keyboard::Left || _event.key.code == sf::Keyboard::Right)
+			{
+				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			}
+		}
+	}
+	
 }
 
 void cPlayerCharacter::Interact()

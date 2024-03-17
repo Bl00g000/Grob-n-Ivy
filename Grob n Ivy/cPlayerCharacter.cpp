@@ -100,14 +100,14 @@ void cPlayerCharacter::StopMovement(sf::Event _event)
 		{
 			if (_event.key.code == sf::Keyboard::A || _event.key.code == sf::Keyboard::D)
 			{
-				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, m_b2Body->GetLinearVelocity().y));
 			}
 		}
 		else
 		{
 			if (_event.key.code == sf::Keyboard::Left || _event.key.code == sf::Keyboard::Right)
 			{
-				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, m_b2Body->GetLinearVelocity().y));
 			}
 		}
 	}

@@ -28,7 +28,7 @@ public:
 
 	void ProcessMovement();
 	void StopMovement(sf::Event _event);
-	void Interact();
+	void Interact(sf::Event _event);
 	void CycleColor(sf::Event _event);
 	void ChangeColor(int _iColorIndex);
 

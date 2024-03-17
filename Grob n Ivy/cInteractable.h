@@ -1,6 +1,5 @@
 #pragma once
 #include "cPhysicsObject.h"
-#include "cPlayerCharacter.h"
 
 class cInteractable : public cPhysicsObject
 {
@@ -12,6 +11,6 @@ public:
 	~cInteractable();
 
 	void Tick() override;
-	void CheckDistanceFromPlayers(std::vector<cPlayerCharacter> _players);
+	void CheckDistanceFromPlayers();
 };
 

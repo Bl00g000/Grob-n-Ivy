@@ -130,6 +130,8 @@ void cGameManager::Tick()
 
     for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
     {
+        physicsObjIter->Tick();
+
         if (!physicsObjIter->GetHiddenState())
         {
             physicsObjIter->Draw(*m_window);
@@ -219,3 +221,9 @@ vector<shared_ptr<cPhysicsObject>> cGameManager::GetPhysicsObjects()
 {
     return m_physicsObjects;
 }
+
+vector<shared_ptr<cPlayerCharacter>> cGameManager::GetPlayerCharacters()
+{
+    return m_characters;
+}
+

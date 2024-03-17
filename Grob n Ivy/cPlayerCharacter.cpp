@@ -63,7 +63,7 @@ void cPlayerCharacter::ProcessMovement()
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, 10.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -2.0f), true);
 			}
 		}
 		else				// PLAYER 2 MOVEMENT CONTROLS
@@ -83,7 +83,7 @@ void cPlayerCharacter::ProcessMovement()
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, 10.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -2.0f), true);
 			}
 		}
 	}
@@ -173,4 +173,9 @@ void cPlayerCharacter::ChangeColor(int _iColorIndex)
 {
 	m_currentColor = m_allColors[_iColorIndex];
 	m_Sprite->setTexture(m_allTextures[_iColorIndex]);
+}
+
+void cPlayerCharacter::SetInteractableObject(cInteractable* _itrObj)
+{
+	m_interactableObject = _itrObj;
 }

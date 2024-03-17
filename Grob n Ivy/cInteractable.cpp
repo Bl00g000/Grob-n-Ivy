@@ -1,23 +1,34 @@
 #include "cInteractable.h"
 
+#include <iostream>
+
+#include "cGameManager.h"
+#include "cPlayerCharacter.h"
+
 cInteractable::~cInteractable()
 {
 }
 
 void cInteractable::Tick()
 {
-	
+	CheckDistanceFromPlayers();
 }
 
-void cInteractable::CheckDistanceFromPlayers(std::vector<cPlayerCharacter> _players)
+void cInteractable::CheckDistanceFromPlayers()
 {
-	for (cPlayerCharacter player : _players)
+	float fInteractRange = 1.5f;
+
+	if (m_game)
 	{
-		// CHECK DISTANCE TO PLAYER
-		// ONLY DO THE BELOW CODE IF DISTANCE IS WITHIN INTERACT RANGE
-		if (player.CanInteract())
+		if (m_game->GetPlayerCharacters().size() > 0)
 		{
-			player.SetInteractableObject(this);
+			for (int i = 0; i < m_game->GetPlayerCharacters().size(); i++)
+			{
+				if ((GetBody()->GetTransform().p - m_game->GetPlayerCharacters()[i]->GetBody()->GetTransform().p).Length() < fInteractRange)
+				{
+					std::cout << "close enough" << std::endl;
+				}
+			}
 		}
-	}
+	}	
 }

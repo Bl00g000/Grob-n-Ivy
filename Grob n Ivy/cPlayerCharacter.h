@@ -17,7 +17,7 @@ private:
 	std::vector<sf::Texture> m_allTextures;
 
 	bool m_bCanInteract = true;
-	cInteractable *m_interactableObject;
+	cInteractable* m_interactableObject;
 
 public:
 	using cPhysicsObject::cPhysicsObject;
@@ -32,7 +32,7 @@ public:
 	void ChangeColor(int _iColorIndex);
 
 	// Setter
-	void SetInteractableObject(cInteractable _itrObj);
+	void SetInteractableObject(cInteractable* _itrObj);
 
 	// Getters
 	bool IsPlayer1();

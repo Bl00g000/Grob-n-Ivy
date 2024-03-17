@@ -12,5 +12,7 @@ public:
 
 	void Tick() override;
 	void CheckDistanceFromPlayers();
+
+	virtual void Activate();
 };
 

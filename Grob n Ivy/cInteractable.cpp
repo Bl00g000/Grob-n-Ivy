@@ -26,9 +26,20 @@ void cInteractable::CheckDistanceFromPlayers()
 			{
 				if ((GetBody()->GetTransform().p - m_game->GetPlayerCharacters()[i]->GetBody()->GetTransform().p).Length() < fInteractRange)
 				{
-					std::cout << "close enough" << std::endl;
+					// Check that the player can interact (not holding a ball/box)
+					if (m_game->GetPlayerCharacters()[i]->CanInteract())
+					{
+						std::cout << "Close enough" << std::endl;
+						m_game->GetPlayerCharacters()[i]->SetInteractableObject(this);
+					}
 				}
 			}
 		}
 	}	
+}
+
+void cInteractable::Activate()
+{
+	// overwritable function for children class
+	// put in here what will happen when the player interacts with the object.
 }

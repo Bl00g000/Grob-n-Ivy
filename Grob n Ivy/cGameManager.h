@@ -2,6 +2,7 @@
 #include "cPhysicsObject.h"
 #include "cPlayerCharacter.h"
 #include "cMyContactListener.h"
+
 #include <vector>
 
 using std::shared_ptr;
@@ -23,7 +24,10 @@ class cGameManager
 private:
 	// SFML window
 	sf::RenderWindow* m_window;
+	sf::View mainView;
 	bool m_flagForClose = false;
+
+	class cLevelLoader* m_levelLoader;
 
 	// Sprites
 	sf::Sprite m_sprGround;
@@ -48,9 +52,9 @@ private:
 
 	void Tick();
 
-	// Create level border with indestructible walls
-	void CreateBorder();
 	void CreatePlayers();
+  
+	sf::View CreateLevelViewPort(float _iTileCountX, float _iTileCountY);
 
 public:
 	cGameManager();

@@ -1,4 +1,5 @@
 #include "cGameManager.h"
+#include "cLevelLoader.h"
 
 #include <iostream>
 
@@ -11,6 +12,7 @@ cGameManager::cGameManager()
     // Set sprite textures
     sf::Texture groundTex;
     groundTex.loadFromFile("Sprites/plank.png");
+  
     m_sprGround.setTexture(groundTex);
 
     sf::Texture playerTex;
@@ -18,7 +20,6 @@ cGameManager::cGameManager()
     m_sprPlayer1.setTexture(playerTex);
     playerTex.loadFromFile("Sprites/Blue.png");
     m_sprPlayer2.setTexture(playerTex);
-
 
     m_gameFont.loadFromFile("Fonts/arial.ttf");
     m_gameText.setFont(m_gameFont);
@@ -45,9 +46,12 @@ void cGameManager::StartGame()
     m_box2DWorld->SetContactListener(m_contactListener.get());
 
     // Create our first level here
-    CreateBorder();
     CreatePlayers();
     m_window->setKeyRepeatEnabled(false);
+
+    m_levelLoader = new cLevelLoader("Level0", this, m_box2DWorld);
+    m_levelLoader->BuildLevel(&m_physicsObjects);
+
 
     //This is the drawing section for SFML.
     while (m_window->isOpen())
@@ -80,6 +84,7 @@ void cGameManager::Tick()
             m_window->setView(sf::View(visibleArea));
         }
         case sf::Event::KeyPressed:
+
         {
             for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
             {
@@ -87,9 +92,33 @@ void cGameManager::Tick()
 
                 // add interact code here too
             }
+          
+            if (event.key.code == sf::Keyboard::K)
+		        {
+                    for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+                    {
+                        if (physicsObjIter->GetObjectType() == ObjectType::tileTest)
+                        {
+                            if (physicsObjIter->GetHiddenState())
+                            {
+                                physicsObjIter->UnHideObject();
+                            }
+                            else
+                            {
+                                physicsObjIter->HideObject();
+                            }
+                        }
+                        
+                    }
+		        }
         }
         }
     }
+  
+    sf::View levelView = CreateLevelViewPort(16.f, 9.f);
+
+    // Apply the view to the window
+    m_window->setView(levelView);
 
     // Process character movement
     // This is not event-based hence why its not in the event loop
@@ -122,49 +151,36 @@ void cGameManager::Tick()
     }
 }
 
-// creates the level border which consists of 2 walls a ceiling and 1 ground object
-void cGameManager::CreateBorder()
-{
-    shared_ptr<cPhysicsObject> newGroundObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(43.f, 1.f),            // Size
-        sf::Vector2f(21.3f, 22.0f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_sprGround));                         // Sprite
-    m_groundObject = newGroundObject;
-    m_physicsObjects.push_back(newGroundObject);
+sf::View cGameManager::CreateLevelViewPort(float _iTileCountX, float _iTileCountY)
+{   
+    // set the view width and height based on how many tiles exists in the level on x and y axis
+    float fViewWidth = _iTileCountX * g_sizeScale;
+    float fViewHeight = _iTileCountY * g_sizeScale;
 
-    shared_ptr<cPhysicsObject> RoofObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(43.f, 1.f),            // Size
-        sf::Vector2f(21.3f, 0.f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_sprGround));                         // Sprite
-    m_physicsObjects.push_back(RoofObject);
+    sf::View newView(sf::FloatRect(0, 0, fViewWidth, fViewHeight));
 
-    shared_ptr<cPhysicsObject> rightWallObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(1.f, 43.f),            // Size
-        sf::Vector2f(40.f, 12.f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_sprGround));                         // Sprite
-    m_physicsObjects.push_back(rightWallObject);
+    // get the view and window aspect ratios
+    float fViewAspectRatio = newView.getSize().x / newView.getSize().y;
+    float fWindowAspectRatio = m_window->getSize().x / m_window->getSize().y;
 
-    shared_ptr<cPhysicsObject> leftWallObject(new cPhysicsObject(this,
-        b2Shape::Type::e_polygon,
-        m_box2DWorld,
-        sf::Vector2f(1.f, 43.f),            // Size
-        sf::Vector2f(0.f, 12.f),           // Position
-        180,
-        b2BodyType::b2_staticBody,               // Body Type
-        &m_sprGround));                         // Sprite
-    m_physicsObjects.push_back(leftWallObject);
+    float fScaleFactor = 1.0f;
+
+    // If view's aspect ratio is wider than window's, scale by width
+    // otherwise if the view's aspect ratio is taller than window's, scale by height
+    if (fViewAspectRatio > fWindowAspectRatio)
+    {
+        fScaleFactor = static_cast<float>(m_window->getSize().x) / newView.getSize().x;
+    }
+    else 
+    {
+        fScaleFactor = static_cast<float>(m_window->getSize().y) / newView.getSize().y;
+    }
+
+    // Set the initial view size and center it
+    newView.setSize(m_window->getSize().x / fScaleFactor, m_window->getSize().y / fScaleFactor);
+    newView.setCenter(fViewWidth / 2.f, fViewHeight / 2.f);
+
+    return newView;
 }
 
 void cGameManager::CreatePlayers()

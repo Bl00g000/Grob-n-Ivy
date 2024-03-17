@@ -159,7 +159,7 @@ void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileTy
 		0,
 		b2BodyType::b2_staticBody,				   	// Body type
 		_tileType,
-		_sprite));								   	// Sprite
+		_sprite, 1));								   	// Sprite
 
 	_physicsObject->push_back(testTile);
 }

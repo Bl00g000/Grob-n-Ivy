@@ -23,6 +23,7 @@ class cGameManager
 private:
 	// SFML window
 	sf::RenderWindow* m_window;
+	sf::View mainView;
 	bool m_flagForClose = false;
 
 	class cLevelLoader* m_levelLoader;
@@ -46,6 +47,7 @@ private:
 	sf::Text m_gameText;
 
 	void Tick();
+	sf::View CreateLevelViewPort(float _iTileCountX, float _iTileCountY);
 
 public:
 	cGameManager();

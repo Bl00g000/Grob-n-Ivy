@@ -95,8 +95,11 @@ void cLevelLoader::LoadLevel(std::string _sFilePath)
 	}
 }
 
-// Builds level from file
-// Separates different tile types based on letter in file
+// Name: BuildLevel
+// Author: Juan
+// Parameters: string
+// Returns: Void
+// Purpose: Runs through the level data and builds the level
 void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObjects)
 {
 	for (int y = 0; y < m_iLevelHeight; y++)
@@ -129,13 +132,11 @@ void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>
 // Purpose: Creates level tiles based on tiletypes specified in the level data file
 void cLevelLoader::CreateTile(sf::Vector2f _pos, TileType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject)
 {
+	// different tiles to be created
 	switch (_tileType)
 	{
 	case TileType::tileGround:
 		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
-		break;
-	case TileType::tileTest:
-		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTest);
 		break;
 	}
 }
@@ -166,19 +167,13 @@ void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, TileType _tileType
 // Purpose: Loads all the required sprites and textures for the level loader to function
 void cLevelLoader::LoadSprites()
 {
-	// Loading Textures
-	if (!m_textureTest.loadFromFile("Sprites/plank.png"))
-	{
-		std::cout << "ground not loaded" << std::endl;
-	}
-	if (!m_groundTexture.loadFromFile("Sprites/Red.png"))
+	if (!m_groundTexture.loadFromFile("Sprites/Plank.png"))
 	{
 		std::cout << "plank not loaded" << std::endl;
 	}
 
 	// Setting textures to sprite variables
 	m_sprTile.setTexture(m_groundTexture);
-	m_sprTest.setTexture(m_textureTest);
 }
 
 // Name: getPlayerSpawn

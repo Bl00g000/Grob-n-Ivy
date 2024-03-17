@@ -69,6 +69,27 @@ void cGameManager::Tick()
 	            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 	            m_window->setView(sf::View(visibleArea));
 	        }
+			case sf::Event::KeyPressed:
+	        {
+		        if (event.key.code == sf::Keyboard::K)
+		        {
+                    for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+                    {
+                        if (physicsObjIter->GetObjectType() == ObjectType::tileTest)
+                        {
+                            if (physicsObjIter->GetHiddenState())
+                            {
+                                physicsObjIter->UnHideObject();
+                            }
+                            else
+                            {
+                                physicsObjIter->HideObject();
+                            }
+                        }
+                        
+                    }
+		        }
+	        }
         }
 
         sf::View levelView = CreateLevelViewPort(16.f, 9.f);
@@ -80,10 +101,14 @@ void cGameManager::Tick()
 
         for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
         {
-            physicsObjIter->Draw(*m_window);
+            if (!physicsObjIter->GetHiddenState())
+            {
+                physicsObjIter->Draw(*m_window);
+            }
         }
 
         
+
         //Finally, display the window.
         m_window->display();
 

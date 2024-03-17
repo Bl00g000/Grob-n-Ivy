@@ -5,12 +5,6 @@
 
 #include "cGameManager.h"
 
-enum TileType
-{
-	tileGround,
-	tileTest,
-};
-
 class cLevelLoader
 {
 private:
@@ -42,8 +36,8 @@ public:
 	void BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObjects);
 
 	// Creating the tiles
-	void CreateTile(sf::Vector2f _pos, TileType _tileType, std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject);
-	void CreateTilePhysicsObject(sf::Vector2f _pos, TileType _tileType,
+	void CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject);
+	void CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileType,
 	                             std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite);
 
 	// Loading all required sprites and textures

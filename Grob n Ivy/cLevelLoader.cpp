@@ -109,11 +109,11 @@ void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>
 			// Fake tiles
 			if (m_cLevelArray[y][x] == 'x')
 			{
-				CreateTile(sf::Vector2f(x, y), TileType::tileGround, _physicsObjects);
+				CreateTile(sf::Vector2f(x, y), ObjectType::tileGround, _physicsObjects);
 			}
 			if (m_cLevelArray[y][x] == 'X')
 			{
-				CreateTile(sf::Vector2f(x, y), TileType::tileTest, _physicsObjects);
+				CreateTile(sf::Vector2f(x, y), ObjectType::tileTest, _physicsObjects);
 			}
 
 			// Player spawn
@@ -130,12 +130,15 @@ void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>
 // Parameters: sf::vector2f, TileType, vector<shared_ptr<cPhysicsObject>>*
 // Returns: Void
 // Purpose: Creates level tiles based on tiletypes specified in the level data file
-void cLevelLoader::CreateTile(sf::Vector2f _pos, TileType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject)
+void cLevelLoader::CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject)
 {
 	// different tiles to be created
 	switch (_tileType)
 	{
-	case TileType::tileGround:
+	case ObjectType::tileGround:
+		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
+		break;
+	case ObjectType::tileTest:
 		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
 		break;
 	}
@@ -146,7 +149,7 @@ void cLevelLoader::CreateTile(sf::Vector2f _pos, TileType _tileType, std::vector
 // Parameters: N/A
 // Returns: Void
 // Purpose: Creates a 1x1 (times the game scale size) physics object
-void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, TileType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite)
+void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite)
 {
 	shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(gameManagerRef,
 		b2Shape::Type::e_circle,
@@ -155,6 +158,7 @@ void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, TileType _tileType
 		_pos + sf::Vector2f(.5f, .5f),         	// Position
 		0,
 		b2BodyType::b2_staticBody,				   	// Body type
+		_tileType,
 		_sprite));								   	// Sprite
 
 	_physicsObject->push_back(testTile);

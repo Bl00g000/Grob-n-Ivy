@@ -131,7 +131,10 @@ void cGameManager::Tick()
 
     for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
     {
-        physicsObjIter->Draw(*m_window);
+        if (!physicsObjIter->GetHiddenState())
+        {
+            physicsObjIter->Draw(*m_window);
+        }
     }
 
     for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
@@ -192,7 +195,8 @@ void cGameManager::CreatePlayers()
         sf::Vector2f(5.f, 5.f),
         0.0f,
         b2BodyType::b2_dynamicBody,
-        &m_sprPlayer1));
+        ObjectType::none,
+        &m_sprPlayer1, -1));
     
     newPlayer1->Initialize(true, true);
     m_characters.push_back(newPlayer1);
@@ -204,7 +208,8 @@ void cGameManager::CreatePlayers()
         sf::Vector2f(10.f, 5.f),
         0.0f,
         b2BodyType::b2_dynamicBody,
-        &m_sprPlayer2));
+        ObjectType::none,
+        &m_sprPlayer2, -1));
     
     newPlayer2->Initialize(false, true);
     m_characters.push_back(newPlayer2);

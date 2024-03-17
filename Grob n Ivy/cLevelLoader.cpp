@@ -152,7 +152,7 @@ void cLevelLoader::CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vect
 void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite)
 {
 	shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(gameManagerRef,
-		b2Shape::Type::e_circle,
+		b2Shape::Type::e_polygon,
 		b2WorldRef,
 		sf::Vector2f(1.f, 1.f),				  	// Size
 		_pos + sf::Vector2f(.5f, .5f),         	// Position

@@ -5,9 +5,10 @@ cPhysicsObject::cPhysicsObject()
 
 }
 
-cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, std::shared_ptr<b2World> _box2DWorld, sf::Vector2f _size,
-	sf::Vector2f _position, float _rotation, b2BodyType _bodyType, ObjectType _objectType, sf::Sprite* _sprite,
-	int16 _filterGroup)
+cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, std::shared_ptr<b2World> _box2DWorld,
+	sf::Vector2f _size, sf::Vector2f _position, float _rotation,
+	b2BodyType _bodyType, sf::Sprite* _sprite, int16 _filterGroup,
+	ObjectType _objectType, float _fFriction , float _fBounciness, bool _fixedRotation)
 {
 	m_box2DWorld = _box2DWorld;
 	m_v2fSize = _size * g_sizeScale;
@@ -43,11 +44,13 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 	}
 
 	// Fixture for body using poly shape
-	m_fixtureDef.friction = 0.5f;
+	m_fixtureDef.friction = _fFriction;
 	m_fixtureDef.density = 1.0f; // kg/m^3
-	m_fixtureDef.restitution = 0.3f; // bounciness
+	m_fixtureDef.restitution = _fBounciness; // bounciness
 	m_fixtureDef.filter.groupIndex = m_int16FilterGroup; // Allows objects of the same negative index to not collide with each other
 	m_b2Body->CreateFixture(&m_fixtureDef);
+
+	m_b2Body->SetFixedRotation(_fixedRotation);
 
 	// Set the scale of the sprite
 	m_v2fSpriteScale = { m_v2fSize.x / m_Sprite->getTexture()->getSize().x, m_v2fSize.y / m_Sprite->getTexture()->getSize().y };

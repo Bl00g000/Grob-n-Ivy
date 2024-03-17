@@ -51,19 +51,20 @@ void cPlayerCharacter::ProcessMovement()
 			// Move right
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(10.0f, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Move left
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(-10.0f, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -2.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -1.0f), true);
 			}
 		}
 		else				// PLAYER 2 MOVEMENT CONTROLS
@@ -71,19 +72,42 @@ void cPlayerCharacter::ProcessMovement()
 			// Move right
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(10.0f, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Move left
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
+				m_b2Body->SetLinearVelocity(b2Vec2(-10.0f, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -2.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -1.0f), true);
+			}
+		}
+	}
+}
+
+void cPlayerCharacter::StopMovement(sf::Event _event)
+{
+	if (m_bIsKeyboard)
+	{
+		if (m_bPlayer1)
+		{
+			if (_event.key.code == sf::Keyboard::A || _event.key.code == sf::Keyboard::D)
+			{
+				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			}
+		}
+		else
+		{
+			if (_event.key.code == sf::Keyboard::Left || _event.key.code == sf::Keyboard::Right)
+			{
+				m_b2Body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 			}
 		}
 	}

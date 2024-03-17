@@ -111,10 +111,17 @@ void cGameManager::Tick()
                 }
 	        }
         }
+        case sf::Event::KeyReleased:
+	    {
+            for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+            {
+                characterIter->StopMovement(event);
+            }
+	    }
         }
     }
   
-    sf::View levelView = CreateLevelViewPort(16.f, 9.f);
+    sf::View levelView = CreateLevelViewPort(48.f, 27.f);
 
     // Apply the view to the window
     m_window->setView(levelView);
@@ -196,8 +203,10 @@ void cGameManager::CreatePlayers()
         sf::Vector2f(5.f, 5.f),
         0.0f,
         b2BodyType::b2_dynamicBody,
+        &m_sprPlayer1,
+        -1,
         ObjectType::none,
-        &m_sprPlayer1, -1));
+        0.0f, 0.f, true)); // friction/bounciness/fixedRotation
     
     newPlayer1->Initialize(true, true);
     m_characters.push_back(newPlayer1);
@@ -209,8 +218,10 @@ void cGameManager::CreatePlayers()
         sf::Vector2f(10.f, 5.f),
         0.0f,
         b2BodyType::b2_dynamicBody,
+        &m_sprPlayer2, 
+        -1,
         ObjectType::none,
-        &m_sprPlayer2, -1));
+        0.0f, 0.f, true)); // friction/bounciness/fixedRotation));
     
     newPlayer2->Initialize(false, true);
     m_characters.push_back(newPlayer2);

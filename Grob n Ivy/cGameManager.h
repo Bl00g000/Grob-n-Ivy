@@ -1,6 +1,7 @@
 #pragma once
 #include "cPhysicsObject.h"
 #include "cMyContactListener.h"
+
 #include <vector>
 
 using std::shared_ptr;
@@ -22,7 +23,10 @@ class cGameManager
 private:
 	// SFML window
 	sf::RenderWindow* m_window;
+	sf::View mainView;
 	bool m_flagForClose = false;
+
+	class cLevelLoader* m_levelLoader;
 
 	// Sprites
 	sf::Sprite m_groundSprite;
@@ -43,15 +47,13 @@ private:
 	sf::Text m_gameText;
 
 	void Tick();
-
-	// Create level border with indestructible walls
-	void CreateBorder();
+	sf::View CreateLevelViewPort(float _iTileCountX, float _iTileCountY);
 
 public:
 	cGameManager();
 	~cGameManager();
-
-	void StartGame();
+  
+	void startGame();
 
 	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();
 };

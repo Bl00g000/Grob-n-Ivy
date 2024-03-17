@@ -1,13 +1,15 @@
 #include "cPhysicsObject.h"
 
 cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, std::shared_ptr<b2World> _box2DWorld, sf::Vector2f _size,
-	sf::Vector2f _position, float _rotation, b2BodyType _bodyType, sf::Sprite* _sprite,
+	sf::Vector2f _position, float _rotation, b2BodyType _bodyType, ObjectType _objectType, sf::Sprite* _sprite,
 	int16 _filterGroup)
 {
 	m_box2DWorld = _box2DWorld;
 	m_v2fSize = _size * g_sizeScale;
 	m_Sprite = _sprite;
 	m_game = _game;
+	m_int16FilterGroup = _filterGroup;
+	m_objectType = _objectType;
 
 	// Defining body and creating it with world
 	b2BodyDef bodyDef;
@@ -16,7 +18,6 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 	bodyDef.type = _bodyType;
 	m_b2Body = m_box2DWorld->CreateBody(&bodyDef);
 
-	b2FixtureDef fixtureDef;
 	b2CircleShape circleShape;
 	b2PolygonShape polyShape;
 
@@ -25,27 +26,39 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 	case b2Shape::e_circle:
 		
 		circleShape.m_radius = m_v2fSize.x / 2 / g_moveScale;
-		fixtureDef.shape = &circleShape;
+		m_fixtureDef.shape = &circleShape;
 		break;
 	case b2Shape::e_polygon:
+
 		// Create box using poly shape
-		
 		polyShape.SetAsBox(m_v2fSize.x / 2 / g_moveScale, m_v2fSize.y / 2 / g_moveScale);
-		fixtureDef.shape = &polyShape;
+		m_fixtureDef.shape = &polyShape;
 		break;
 	default: ;
 	}
 
 	// Fixture for body using poly shape
-	fixtureDef.friction = 0.5f;
-	fixtureDef.density = 1.0f; // kg/m^3
-	fixtureDef.restitution = 0.3f; // bounciness
-	fixtureDef.filter.groupIndex = _filterGroup; // Allows objects of the same negative index to not collide with each other
-	m_b2Body->CreateFixture(&fixtureDef);
+	m_fixtureDef.friction = 0.5f;
+	m_fixtureDef.density = 1.0f; // kg/m^3
+	m_fixtureDef.restitution = 0.3f; // bounciness
+	m_fixtureDef.filter.groupIndex = m_int16FilterGroup; // Allows objects of the same negative index to not collide with each other
+	m_b2Body->CreateFixture(&m_fixtureDef);
 
 	// Set the scale of the sprite
 	m_v2fSpriteScale = { m_v2fSize.x / m_Sprite->getTexture()->getSize().x, m_v2fSize.y / m_Sprite->getTexture()->getSize().y };
 	
+}
+
+void cPhysicsObject::HideObject()
+{
+	m_fixtureDef.filter.groupIndex = -1;
+	m_bHidden = true;
+}
+
+void cPhysicsObject::UnHideObject()
+{
+	m_fixtureDef.filter.groupIndex = m_int16FilterGroup;
+	m_bHidden = false;
 }
 
 cPhysicsObject::~cPhysicsObject()
@@ -123,4 +136,14 @@ void cPhysicsObject::SetHasCollided(bool _hasCollided)
 bool cPhysicsObject::GetHasCollided()
 {
 	return m_bHasCollided;
+}
+
+bool cPhysicsObject::GetHiddenState()
+{
+	return m_bHidden;
+}
+
+ObjectType cPhysicsObject::GetObjectType()
+{
+	return m_objectType;
 }

@@ -54,7 +54,6 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 
 	// Set the scale of the sprite
 	m_v2fSpriteScale = { m_v2fSize.x / m_Sprite->getTexture()->getSize().x, m_v2fSize.y / m_Sprite->getTexture()->getSize().y };
-	
 }
 
 void cPhysicsObject::HideObject()

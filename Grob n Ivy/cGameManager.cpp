@@ -1,16 +1,25 @@
 #include "cGameManager.h"
 #include "cLevelLoader.h"
 
+#include <iostream>
+
 cGameManager::cGameManager()
 {
     //Creates an SFML window at a desired resolution.
     m_window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML and Box2D");
     m_window->setFramerateLimit(60);
 
+    // Set sprite textures
     sf::Texture groundTex;
     groundTex.loadFromFile("Sprites/plank.png");
-    
-    m_groundSprite.setTexture(groundTex);
+  
+    m_sprGround.setTexture(groundTex);
+
+    sf::Texture playerTex;
+    playerTex.loadFromFile("Sprites/Red.png");
+    m_sprPlayer1.setTexture(playerTex);
+    playerTex.loadFromFile("Sprites/Blue.png");
+    m_sprPlayer2.setTexture(playerTex);
 
     m_gameFont.loadFromFile("Fonts/arial.ttf");
     m_gameText.setFont(m_gameFont);
@@ -18,7 +27,7 @@ cGameManager::cGameManager()
     m_gameText.setFillColor(sf::Color::White);
     m_gameText.setOrigin(0.f, 20.f);
 
-    startGame();
+    StartGame();
 }
 
 cGameManager::~cGameManager()
@@ -36,8 +45,13 @@ void cGameManager::StartGame()
 
     m_box2DWorld->SetContactListener(m_contactListener.get());
 
+    // Create our first level here
+    CreatePlayers();
+    m_window->setKeyRepeatEnabled(false);
+
     m_levelLoader = new cLevelLoader("Level0", this, m_box2DWorld);
     m_levelLoader->BuildLevel(&m_physicsObjects);
+
 
     //This is the drawing section for SFML.
     while (m_window->isOpen())
@@ -59,18 +73,27 @@ void cGameManager::Tick()
     {
         switch (event.type)
         {
-	        case sf::Event::Closed:
-	        {
-	            break;
-	        }
-	        case sf::Event::Resized:
-	        {
-	            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-	            m_window->setView(sf::View(visibleArea));
-	        }
-			case sf::Event::KeyPressed:
-	        {
-		        if (event.key.code == sf::Keyboard::K)
+        case sf::Event::Closed:
+        {
+            m_window->close();  // THIS IS FOR TESTING ITS ACTUALLY IN FLAGFORCLOSE
+            break;
+        }
+        case sf::Event::Resized:
+        {
+            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+            m_window->setView(sf::View(visibleArea));
+        }
+        case sf::Event::KeyPressed:
+
+        {
+            for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+            {
+                characterIter->CycleColor(event);
+
+                // add interact code here too
+            }
+          
+            if (event.key.code == sf::Keyboard::K)
 		        {
                     for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
                     {
@@ -88,39 +111,48 @@ void cGameManager::Tick()
                         
                     }
 		        }
-	        }
         }
-
-        sf::View levelView = CreateLevelViewPort(16.f, 9.f);
-
-        // Apply the view to the window
-        m_window->setView(levelView);
-
-        m_window->clear();
-
-        for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
-        {
-            if (!physicsObjIter->GetHiddenState())
-            {
-                physicsObjIter->Draw(*m_window);
-            }
         }
+    }
+  
+    sf::View levelView = CreateLevelViewPort(16.f, 9.f);
 
-        
+    // Apply the view to the window
+    m_window->setView(levelView);
 
-        //Finally, display the window.
-        m_window->display();
+    // Process character movement
+    // This is not event-based hence why its not in the event loop
+    for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+    {
+        characterIter->ProcessMovement();
+    }
 
-        if (m_flagForClose)
-        {
-            m_levelState = eLevelState::ClosingGame;
-            m_window->close();
-        }
+    m_window->clear();
+
+    for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+    {
+        physicsObjIter->Draw(*m_window);
+    }
+
+    for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+    {
+        characterIter->Draw(*m_window);
+    }
+
+    //m_player1->Draw(*m_window);
+
+    //Finally, display the window.
+    m_window->display();
+
+    if (m_flagForClose)
+    {
+        m_levelState = eLevelState::ClosingGame;
+        m_window->close();
     }
 }
 
 sf::View cGameManager::CreateLevelViewPort(float _iTileCountX, float _iTileCountY)
-{
+{   
     // set the view width and height based on how many tiles exists in the level on x and y axis
     float fViewWidth = _iTileCountX * g_sizeScale;
     float fViewHeight = _iTileCountY * g_sizeScale;
@@ -149,6 +181,33 @@ sf::View cGameManager::CreateLevelViewPort(float _iTileCountX, float _iTileCount
     newView.setCenter(fViewWidth / 2.f, fViewHeight / 2.f);
 
     return newView;
+}
+
+void cGameManager::CreatePlayers()
+{
+    shared_ptr<cPlayerCharacter> newPlayer1(new cPlayerCharacter(this,
+        b2Shape::Type::e_polygon,
+        m_box2DWorld,
+        sf::Vector2f(1.f, 1.f),
+        sf::Vector2f(5.f, 5.f),
+        0.0f,
+        b2BodyType::b2_dynamicBody,
+        &m_sprPlayer1));
+    
+    newPlayer1->Initialize(true, true);
+    m_characters.push_back(newPlayer1);
+    
+    shared_ptr<cPlayerCharacter> newPlayer2(new cPlayerCharacter(this,
+        b2Shape::Type::e_polygon,
+        m_box2DWorld,
+        sf::Vector2f(1.f, 1.f),
+        sf::Vector2f(10.f, 5.f),
+        0.0f,
+        b2BodyType::b2_dynamicBody,
+        &m_sprPlayer2));
+    
+    newPlayer2->Initialize(false, true);
+    m_characters.push_back(newPlayer2);
 }
 
 //  returns all physics objects

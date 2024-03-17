@@ -1,5 +1,6 @@
 #pragma once
 #include "cPhysicsObject.h"
+#include "cPlayerCharacter.h"
 #include "cMyContactListener.h"
 
 #include <vector>
@@ -29,7 +30,9 @@ private:
 	class cLevelLoader* m_levelLoader;
 
 	// Sprites
-	sf::Sprite m_groundSprite;
+	sf::Sprite m_sprGround;
+	sf::Sprite m_sprPlayer1;
+	sf::Sprite m_sprPlayer2;
 
 	// Box2D
 	shared_ptr<b2World> m_box2DWorld;
@@ -38,6 +41,7 @@ private:
 
 	// Key Objects
 	vector<shared_ptr<cPhysicsObject>> m_physicsObjects;
+	vector<shared_ptr<cPlayerCharacter>> m_characters;
 
 	//States
 	eLevelState m_levelState = eLevelState::level1;
@@ -47,13 +51,16 @@ private:
 	sf::Text m_gameText;
 
 	void Tick();
+
+	void CreatePlayers();
+  
 	sf::View CreateLevelViewPort(float _iTileCountX, float _iTileCountY);
 
 public:
 	cGameManager();
 	~cGameManager();
-  
-	void startGame();
+
+	void StartGame();
 
 	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();
 };

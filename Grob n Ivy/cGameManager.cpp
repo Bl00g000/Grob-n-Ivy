@@ -94,23 +94,23 @@ void cGameManager::Tick()
             }
           
             if (event.key.code == sf::Keyboard::K)
-		        {
-                    for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+	        {
+                for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+                {
+                    if (physicsObjIter->GetObjectType() == ObjectType::tileTest)
                     {
-                        if (physicsObjIter->GetObjectType() == ObjectType::tileTest)
+                        if (physicsObjIter->GetHiddenState())
                         {
-                            if (physicsObjIter->GetHiddenState())
-                            {
-                                physicsObjIter->UnHideObject();
-                            }
-                            else
-                            {
-                                physicsObjIter->HideObject();
-                            }
+                            physicsObjIter->UnHideObject();
                         }
-                        
+                        else
+                        {
+                            physicsObjIter->HideObject();
+                        }
                     }
-		        }
+                    
+                }
+	        }
         }
         }
     }

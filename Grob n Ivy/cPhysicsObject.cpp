@@ -56,13 +56,23 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 
 void cPhysicsObject::HideObject()
 {
-	m_fixtureDef.filter.groupIndex = -1;
+	b2Fixture* fixture = m_b2Body->GetFixtureList(); // Get the first fixture attached to the body
+
+	b2Filter filter = fixture->GetFilterData();
+	filter.groupIndex = -1; // Set group index to -1 to hide the object
+	fixture->SetFilterData(filter);
+
 	m_bHidden = true;
 }
 
 void cPhysicsObject::UnHideObject()
 {
-	m_fixtureDef.filter.groupIndex = m_int16FilterGroup;
+	b2Fixture* fixture = m_b2Body->GetFixtureList();
+
+	b2Filter filter = fixture->GetFilterData();
+	filter.groupIndex = m_int16FilterGroup; // Restore the original group index
+	fixture->SetFilterData(filter);
+
 	m_bHidden = false;
 }
 

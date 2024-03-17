@@ -13,6 +13,7 @@ private:
 		sf::Color::Blue,
 		sf::Color::Yellow
 	};
+	std::vector<sf::Texture> m_allTextures;
 
 	cPhysicsObject* m_interactingObject;
 

@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include "cPhysicsObject.h"
+#include "cInteractable.h"
 
 #include "cGameManager.h"
 
@@ -11,8 +13,14 @@ private:
 	static int m_iLevelWidth;
 	static int m_iLevelHeight;
 
-	std::shared_ptr<b2World> b2WorldRef;
-	cGameManager* gameManagerRef;
+	vector<shared_ptr<cPhysicsObject>> m_physicsObjects;
+
+	shared_ptr<cInteractable> m_interactable1;
+	vector<shared_ptr<cPhysicsObject>> m_toggledTiles1;
+
+
+	shared_ptr<b2World> m_b2WorldRef;
+	cGameManager* m_gameManagerRef;
 
 	std::string m_sLevelName;
 
@@ -33,15 +41,10 @@ public:
 	// Loading and building the level
 	void GetDynamicLevelSize(std::string _sLevel);
 	void LoadLevel(std::string _sFilePath);
-	void BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObjects);
+	void BuildLevel();
 
-	// Creating the tiles
-	void CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject);
-	void CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileType,
-	                             std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite);
-	void CreateInteractablePhysicsObject(sf::Vector2f _pos, ObjectType _tileType,
-	                                     std::vector<std::shared_ptr<cPhysicsObject>>* _physicsObject,
-	                                     sf::Sprite* _sprite);
+	void Tick();
+	void DrawLevel(sf::RenderWindow* _window);
 
 	// Loading all required sprites and textures
 	void LoadSprites();
@@ -51,5 +54,6 @@ public:
 	std::string GetName();
 	int GetLevelWidth();
 	int GetLevelHeight();
+	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();
 };
 

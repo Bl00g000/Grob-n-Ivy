@@ -6,11 +6,11 @@
 int cLevelLoader::m_iLevelWidth;
 int cLevelLoader::m_iLevelHeight;
 
-cLevelLoader::cLevelLoader(std::string _sLevel, cGameManager* _gameManager, std::shared_ptr<b2World> _b2World)
+cLevelLoader::cLevelLoader(std::string _sLevel, cGameManager* _gameManager, shared_ptr<b2World> _b2World)
 {
 	m_playerSpawn = sf::Vector2f(0, 0);
-	b2WorldRef = _b2World;
-	gameManagerRef = _gameManager;
+	m_b2WorldRef = _b2World;
+	m_gameManagerRef = _gameManager;
 
 	m_sLevelName = _sLevel;
 
@@ -100,7 +100,7 @@ void cLevelLoader::LoadLevel(std::string _sFilePath)
 // Parameters: string
 // Returns: Void
 // Purpose: Runs through the level data and builds the level
-void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObjects)
+void cLevelLoader::BuildLevel()
 {
 	for (int y = 0; y < m_iLevelHeight; y++)
 	{
@@ -109,11 +109,51 @@ void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>
 			// Fake tiles
 			if (m_cLevelArray[y][x] == 'x')
 			{
-				CreateTile(sf::Vector2f(x, y), ObjectType::tileGround, _physicsObjects);
+				shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x,y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprTile,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_physicsObjects.push_back(testTile);
 			}
-			if (m_cLevelArray[y][x] == 'X')
+			if (m_cLevelArray[y][x] == '!')
 			{
-				CreateTile(sf::Vector2f(x, y), ObjectType::tileTest, _physicsObjects);
+				shared_ptr<cInteractable> testInteractable(new cInteractable(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprTile,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_interactable1 = testInteractable;
+			}
+			if (m_cLevelArray[y][x] == '1')
+			{
+				shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprTile,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_toggledTiles1.push_back(testTile);
 			}
 
 			// Player spawn
@@ -123,70 +163,36 @@ void cLevelLoader::BuildLevel(std::vector<std::shared_ptr<class cPhysicsObject>>
 			}
 		}
 	}
+
+	// attach toggleable tiles to their interactables
+	m_interactable1->SetTarget(m_toggledTiles1);
 }
 
-// Name: CreateTile
-// Author: Juan
-// Parameters: sf::vector2f, TileType, vector<shared_ptr<cPhysicsObject>>*
-// Returns: Void
-// Purpose: Creates level tiles based on tiletypes specified in the level data file
-void cLevelLoader::CreateTile(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject)
+void cLevelLoader::Tick()
 {
-	// different tiles to be created
-	switch (_tileType)
+	m_interactable1->Tick();
+}
+
+
+void cLevelLoader::DrawLevel(sf::RenderWindow* _window)
+{
+	m_interactable1->Draw(*_window);
+
+	for (shared_ptr<cPhysicsObject> interactObjIter : m_toggledTiles1)
 	{
-	case ObjectType::tileGround:
-		CreateTilePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
-		break;
-	case ObjectType::tileTest:
-		CreateInteractablePhysicsObject(_pos, _tileType, _physicsObject, &m_sprTile);
-		break;
+		if (!interactObjIter->GetHiddenState())
+		{
+			interactObjIter->Draw(*_window);
+		}
 	}
-}
 
-// Name: LoadSprites
-// Author: Juan
-// Parameters: N/A
-// Returns: Void
-// Purpose: Creates a 1x1 (times the game scale size) physics object
-void cLevelLoader::CreateTilePhysicsObject(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite)
-{
-	shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(gameManagerRef,
-		b2Shape::Type::e_polygon,
-		b2WorldRef,
-		sf::Vector2f(1.f, 1.f),				  	// Size
-		_pos + sf::Vector2f(.5f, .5f),         	// Position
-		0,
-		b2BodyType::b2_staticBody,				   	// Body type
-		_sprite,									// Sprite
-		1,
-		_tileType,
-		1.f, 0.f));								   	
-
-
-	_physicsObject->push_back(testTile);
-}
-
-// Name: LoadSprites
-// Author: Juan
-// Parameters: N/A
-// Returns: Void
-// Purpose: Creates a 1x1 (times the game scale size) physics object
-void cLevelLoader::CreateInteractablePhysicsObject(sf::Vector2f _pos, ObjectType _tileType, std::vector<std::shared_ptr<class cPhysicsObject>>* _physicsObject, sf::Sprite* _sprite)
-{
-	shared_ptr<cInteractable> testInteractable(new cInteractable(gameManagerRef,
-		b2Shape::Type::e_polygon,
-		b2WorldRef,
-		sf::Vector2f(1.f, 1.f),				  	// Size
-		_pos + sf::Vector2f(.5f, .5f),         	// Position
-		0,
-		b2BodyType::b2_staticBody,				   	// Body type
-		_sprite,									// Sprite
-		1,
-		_tileType,
-		1.f, 0.f));									   	
-
-	_physicsObject->push_back(testInteractable);
+	for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
+	{
+		if (!physicsObjIter->GetHiddenState())
+		{
+			physicsObjIter->Draw(*_window);
+		}
+	}
 }
 
 // Name: LoadSprites
@@ -245,6 +251,11 @@ int cLevelLoader::GetLevelHeight()
 {
 	int levelHeight = m_iLevelHeight;
 	return levelHeight;
+}
+
+vector<shared_ptr<cPhysicsObject>> cLevelLoader::GetPhysicsObjects()
+{
+	return m_physicsObjects;
 }
 
 

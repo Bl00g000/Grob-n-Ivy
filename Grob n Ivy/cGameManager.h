@@ -40,9 +40,14 @@ private:
 	weak_ptr<cPhysicsObject> m_groundObject;
 
 	// Key Objects
-	vector<shared_ptr<cPhysicsObject>> m_physicsObjects;
-	vector<shared_ptr<cInteractable>> m_interactables;
 	vector<shared_ptr<cPlayerCharacter>> m_characters;
+
+	// Interaction
+	vector<shared_ptr<cInteractable>> m_interactables;
+	
+	vector<shared_ptr<cPhysicsObject>> m_toggledTiles2;
+	vector<shared_ptr<cPhysicsObject>> m_toggledTiles3;
+	vector<shared_ptr<cPhysicsObject>> m_toggledTiles4;
 
 	//States
 	eLevelState m_levelState = eLevelState::level1;
@@ -63,7 +68,8 @@ public:
 
 	void StartGame();
 
-	vector<shared_ptr<cPhysicsObject>> GetPhysicsObjects();
 	vector<shared_ptr<cPlayerCharacter>> GetPlayerCharacters();
+	cLevelLoader* GetLevelLoader();
+
 };
 

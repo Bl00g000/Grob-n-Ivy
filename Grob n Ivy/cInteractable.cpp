@@ -14,6 +14,11 @@ void cInteractable::Tick()
 	CheckDistanceFromPlayers();
 }
 
+void cInteractable::SetTarget(std::vector<std::shared_ptr<cPhysicsObject>> _targetObjects)
+{
+	m_interactTargets = _targetObjects;
+}
+
 void cInteractable::CheckDistanceFromPlayers()
 {
 	float fInteractRange = 1.5f;
@@ -29,7 +34,6 @@ void cInteractable::CheckDistanceFromPlayers()
 					// Check that the player can interact (not holding a ball/box)
 					if (m_game->GetPlayerCharacters()[i]->CanInteract())
 					{
-						std::cout << "Close enough" << std::endl;
 						m_game->GetPlayerCharacters()[i]->SetInteractableObject(this);
 					}
 				}
@@ -40,6 +44,9 @@ void cInteractable::CheckDistanceFromPlayers()
 
 void cInteractable::Activate()
 {
-	// overwritable function for children class
-	// put in here what will happen when the player interacts with the object.
+	std::cout << "test" << std::endl;
+	for (shared_ptr<cPhysicsObject> physicsObjectIter : m_interactTargets)
+	{
+		physicsObjectIter->ToggleHide();
+	}
 }

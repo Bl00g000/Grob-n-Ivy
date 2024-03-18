@@ -1,5 +1,6 @@
 #include "cMyContactListener.h"
 #include "cGameManager.h"
+#include "cLevelLoader.h"
 
 cMyContactListener::cMyContactListener(b2World* _world, cGameManager* _game)
 {
@@ -29,7 +30,7 @@ void cMyContactListener::PreSolve(b2Contact* _contact, const b2Manifold* _oldMan
 
         float approachSpeed = b2Dot(vB - vA, -worldManifold.normal);
 
-        for (auto iter : m_game->GetPhysicsObjects())
+        for (auto iter : m_game->GetLevelLoader()->GetPhysicsObjects())
         {
 	        if (iter->GetBody() == bodyA || iter->GetBody() == bodyB)
 	        {

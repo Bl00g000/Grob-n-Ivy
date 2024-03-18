@@ -5,7 +5,7 @@ cPhysicsObject::cPhysicsObject()
 
 }
 
-cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, std::shared_ptr<b2World> _box2DWorld,
+cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, shared_ptr<b2World> _box2DWorld,
 	sf::Vector2f _size, sf::Vector2f _position, float _rotation,
 	b2BodyType _bodyType, sf::Sprite* _sprite, int16 _filterGroup,
 	ObjectType _objectType, float _fFriction , float _fBounciness, bool _fixedRotation)
@@ -56,26 +56,28 @@ cPhysicsObject::cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, st
 	m_v2fSpriteScale = { m_v2fSize.x / m_Sprite->getTexture()->getSize().x, m_v2fSize.y / m_Sprite->getTexture()->getSize().y };
 }
 
-void cPhysicsObject::HideObject()
+void cPhysicsObject::ToggleHide()
 {
-	b2Fixture* fixture = m_b2Body->GetFixtureList(); // Get the first fixture attached to the body
+	if (m_bHidden)
+	{
+		b2Fixture* fixture = m_b2Body->GetFixtureList();
 
-	b2Filter filter = fixture->GetFilterData();
-	filter.groupIndex = -1; // Set group index to -1 to hide the object
-	fixture->SetFilterData(filter);
+		b2Filter filter = fixture->GetFilterData();
+		filter.groupIndex = m_int16FilterGroup; // Restore the original group index
+		fixture->SetFilterData(filter);
 
-	m_bHidden = true;
-}
+		m_bHidden = false;
+	}
+	else
+	{
+		b2Fixture* fixture = m_b2Body->GetFixtureList(); // Get the first fixture attached to the body
 
-void cPhysicsObject::UnHideObject()
-{
-	b2Fixture* fixture = m_b2Body->GetFixtureList();
+		b2Filter filter = fixture->GetFilterData();
+		filter.groupIndex = -1; // Set group index to -1 to hide the object
+		fixture->SetFilterData(filter);
 
-	b2Filter filter = fixture->GetFilterData();
-	filter.groupIndex = m_int16FilterGroup; // Restore the original group index
-	fixture->SetFilterData(filter);
-
-	m_bHidden = false;
+		m_bHidden = true;
+	}
 }
 
 cPhysicsObject::~cPhysicsObject()

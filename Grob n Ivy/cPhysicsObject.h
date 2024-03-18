@@ -2,6 +2,9 @@
 #include "PhysicsLibrary.h"
 #include "SFML/Graphics.hpp"
 
+using std::shared_ptr;
+using std::vector;
+
 enum ObjectType
 {
 	none,
@@ -12,7 +15,7 @@ enum ObjectType
 class cPhysicsObject
 {
 protected:
-	std::shared_ptr<b2World> m_box2DWorld;
+	shared_ptr<b2World> m_box2DWorld;
 	b2Body* m_b2Body;
 	class cGameManager* m_game = nullptr;
 
@@ -35,7 +38,7 @@ protected:
 
 public:
 	cPhysicsObject();
-	cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, std::shared_ptr<b2World> _box2DWorld,
+	cPhysicsObject(cGameManager* _game, b2Shape::Type _shapeType, shared_ptr<b2World> _box2DWorld,
 		sf::Vector2f _size, sf::Vector2f _position, float _rotation,
 		b2BodyType _bodyType, sf::Sprite* _sprite, int16 _filterGroup = 0,
 		ObjectType _objectType = ObjectType::none, float _fFriction = 0.5f, float _fBounciness = 0.3f,
@@ -51,8 +54,7 @@ public:
 
 	bool IsMarkedForDestruction();
 
-	void HideObject();
-	void UnHideObject();
+	void ToggleHide();
 
 	// setters
 	void SetHasCollided(bool _hasCollided);

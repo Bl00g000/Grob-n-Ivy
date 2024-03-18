@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "cGameManager.h"
+
 cPlayerCharacter::~cPlayerCharacter()
 {
 	delete m_interactableObject;
@@ -10,7 +12,8 @@ cPlayerCharacter::~cPlayerCharacter()
 void cPlayerCharacter::Tick()
 {
 	cPhysicsObject::Tick();
-	
+
+	m_interactableObject = nullptr;
 }
 
 void cPlayerCharacter::Initialize(bool _bPlayer1, bool _bIsKeyboard)
@@ -121,8 +124,10 @@ void cPlayerCharacter::Interact(sf::Event _event)
 		{
 			if (_event.key.code == sf::Keyboard::Q)
 			{
-				// would need to do a check here first
-				// to see if the player is already interacting with something
+				if (m_interactableObject != nullptr)
+				{
+					m_interactableObject->Activate();
+				}
 			}
 		}
 		else

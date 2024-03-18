@@ -50,7 +50,7 @@ void cGameManager::StartGame()
     m_window->setKeyRepeatEnabled(false);
 
     m_levelLoader = new cLevelLoader("Level0", this, m_box2DWorld);
-    m_levelLoader->BuildLevel(&m_physicsObjects);
+    m_levelLoader->BuildLevel();
 
 
     //This is the drawing section for SFML.
@@ -69,6 +69,13 @@ void cGameManager::Tick()
     //Window events:
     sf::Event event;
 
+    
+    for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
+    {
+        characterIter->Tick();
+    }
+    m_levelLoader->Tick();
+
     while (m_window->pollEvent(event))
     {
         switch (event.type)
@@ -85,39 +92,25 @@ void cGameManager::Tick()
         }
         case sf::Event::KeyPressed:
         {
+
             for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
             {
                 characterIter->CycleColor(event);
-
-                // add interact code here too
+                characterIter->Interact(event);
             }
-          
+
             if (event.key.code == sf::Keyboard::K)
-	        {
-                for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
-                {
-                    if (physicsObjIter->GetObjectType() == ObjectType::tileTest)
-                    {
-                        if (physicsObjIter->GetHiddenState())
-                        {
-                            physicsObjIter->UnHideObject();
-                        }
-                        else
-                        {
-                            physicsObjIter->HideObject();
-                        }
-                    }
-                    
-                }
-	        }
+            {
+                
+            }
         }
         case sf::Event::KeyReleased:
-	    {
+        {
             for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
             {
                 characterIter->StopMovement(event);
             }
-	    }
+        }
         }
     }
   
@@ -135,22 +128,13 @@ void cGameManager::Tick()
 
     m_window->clear();
 
-    for (shared_ptr<cPhysicsObject> physicsObjIter : m_physicsObjects)
-    {
-        physicsObjIter->Tick();
-
-        if (!physicsObjIter->GetHiddenState())
-        {
-            physicsObjIter->Draw(*m_window);
-        }
-    }
-
     for (shared_ptr<cPlayerCharacter> characterIter : m_characters)
     {
         characterIter->Draw(*m_window);
     }
 
     //m_player1->Draw(*m_window);
+    m_levelLoader->DrawLevel(m_window);
 
     //Finally, display the window.
     m_window->display();
@@ -227,14 +211,15 @@ void cGameManager::CreatePlayers()
     m_characters.push_back(newPlayer2);
 }
 
-//  returns all physics objects
-vector<shared_ptr<cPhysicsObject>> cGameManager::GetPhysicsObjects()
-{
-    return m_physicsObjects;
-}
 
 vector<shared_ptr<cPlayerCharacter>> cGameManager::GetPlayerCharacters()
 {
     return m_characters;
 }
+
+cLevelLoader* cGameManager::GetLevelLoader()
+{
+    return m_levelLoader;
+}
+
 

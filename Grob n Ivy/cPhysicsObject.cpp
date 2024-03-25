@@ -1,5 +1,7 @@
 #include "cPhysicsObject.h"
 
+#include <iostream>
+
 cPhysicsObject::cPhysicsObject()
 {
 
@@ -122,22 +124,11 @@ void cPhysicsObject::SetHealth(float _newHealth, bool _indestructible)
 	m_bIndestructible = _indestructible;
 }
 
-// lowers health when the object receives impact based on the impact strength
 void cPhysicsObject::ReceiveImpact(float _impactStrength)
 {
 	if (m_bIndestructible) return;
 
 	if (GetBody()->GetType() == b2_staticBody) return;
-
-	if (_impactStrength > 1.0f)
-	{
-		m_fHealth -= _impactStrength;
-
-		if (m_fHealth <= 0)
-		{
-			m_bMarkedForDestroy = true;
-		}
-	}
 }
 
 // returns the value of markedForDestroy
@@ -150,6 +141,11 @@ bool cPhysicsObject::IsMarkedForDestruction()
 void cPhysicsObject::SetHasCollided(bool _hasCollided)
 {
 	m_bHasCollided = _hasCollided;
+}
+
+void cPhysicsObject::SetGrounded(bool _isGrounded)
+{
+	m_grounded = _isGrounded;
 }
 
 // returns the value of hasCollided

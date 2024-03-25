@@ -44,7 +44,6 @@ void cInteractable::CheckDistanceFromPlayers()
 
 void cInteractable::Activate()
 {
-	std::cout << "test" << std::endl;
 	for (shared_ptr<cPhysicsObject> physicsObjectIter : m_interactTargets)
 	{
 		physicsObjectIter->ToggleHide();

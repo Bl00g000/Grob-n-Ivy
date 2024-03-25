@@ -189,7 +189,7 @@ void cGameManager::CreatePlayers()
         b2BodyType::b2_dynamicBody,
         &m_sprPlayer1,
         -1,
-        ObjectType::none,
+        ObjectType::player,
         0.0f, 0.f, true)); // friction/bounciness/fixedRotation
     
     newPlayer1->Initialize(true, true);
@@ -204,7 +204,7 @@ void cGameManager::CreatePlayers()
         b2BodyType::b2_dynamicBody,
         &m_sprPlayer2, 
         -1,
-        ObjectType::none,
+        ObjectType::player,
         0.0f, 0.f, true)); // friction/bounciness/fixedRotation));
     
     newPlayer2->Initialize(false, true);

@@ -65,9 +65,10 @@ void cPlayerCharacter::ProcessMovement()
 			}
 
 			// Jump
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && m_grounded)
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -1.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -10.0f), true);
+				m_grounded = false;
 			}
 		}
 		else				// PLAYER 2 MOVEMENT CONTROLS
@@ -87,9 +88,10 @@ void cPlayerCharacter::ProcessMovement()
 			}
 
 			// Jump
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_grounded)
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -1.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -10.0f), true);
+				m_grounded = false;
 			}
 		}
 	}
@@ -122,7 +124,7 @@ void cPlayerCharacter::Interact(sf::Event _event)
 	{
 		if (m_bPlayer1)
 		{
-			if (_event.key.code == sf::Keyboard::Q)
+			if (_event.key.code == sf::Keyboard::E)
 			{
 				if (m_interactableObject != nullptr)
 				{
@@ -134,8 +136,10 @@ void cPlayerCharacter::Interact(sf::Event _event)
 		{
 			if (_event.key.code == sf::Keyboard::RControl)
 			{
-				// would need to do a check here first
-				// to see if the player is already interacting with something
+				if (m_interactableObject != nullptr)
+				{
+					m_interactableObject->Activate();
+				}
 			}
 		}
 	}

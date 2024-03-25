@@ -30,13 +30,50 @@ void cMyContactListener::PreSolve(b2Contact* _contact, const b2Manifold* _oldMan
 
         float approachSpeed = b2Dot(vB - vA, -worldManifold.normal);
 
-        for (auto iter : m_game->GetLevelLoader()->GetPhysicsObjects())
+        shared_ptr<cPhysicsObject> objA;
+        shared_ptr<cPhysicsObject> objB;
+
+        for (shared_ptr<cPhysicsObject> iter : m_game->GetLevelLoader()->GetPhysicsObjects())
         {
-	        if (iter->GetBody() == bodyA || iter->GetBody() == bodyB)
-	        {
-	        	iter->SetHasCollided(true);
-                iter->ReceiveImpact(approachSpeed);
-	        }
+            if (iter->GetBody() == bodyA)
+            {
+                objA = iter;
+            }
+            else if (iter->GetBody() == bodyB)
+            {
+                objB = iter;
+            }
+
+            for (shared_ptr<cPhysicsObject> iter : m_game->GetPlayerCharacters())
+            {
+                if (iter->GetBody() == bodyA)
+                {
+                    objA = iter;
+                }
+                else if (iter->GetBody() == bodyB)
+                {
+                    objB = iter;
+                }
+            }
+
+            if (objA && objB)
+            {
+                if (objA->GetObjectType() == ObjectType::player)
+                {
+                    if (objB->GetObjectType() == ObjectType::tileGround)
+                    {
+                        objA->SetGrounded(true);
+                    }
+                }
+
+                if (objB->GetObjectType() == ObjectType::player)
+                {
+                    if (objA->GetObjectType() == ObjectType::tileGround)
+                    {
+                        objB->SetGrounded(true);
+                    }
+                }
+            }
         }
     }
 }

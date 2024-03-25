@@ -8,6 +8,7 @@ using std::vector;
 enum ObjectType
 {
 	none,
+	player,
 	tileGround,
 	tileTest,
 };
@@ -21,6 +22,8 @@ protected:
 
 	// Size of object scaled to pixels per meter
 	sf::Vector2f m_v2fSize;
+
+	bool m_grounded = true;
 
 	ObjectType m_objectType;
 
@@ -58,6 +61,7 @@ public:
 
 	// setters
 	void SetHasCollided(bool _hasCollided);
+	void SetGrounded(bool _isGrounded);
 	void SetHealth(float _newHealth, bool _indestructible = false);
 
 	// getters
@@ -65,5 +69,7 @@ public:
 	bool GetHiddenState();
 	ObjectType GetObjectType();
 	b2Body* GetBody();
+
+	
 };
 

@@ -45,12 +45,13 @@ void cGameManager::StartGame()
 
     m_box2DWorld->SetContactListener(m_contactListener.get());
 
-    // Create our first level here
-    CreatePlayers();
     m_window->setKeyRepeatEnabled(false);
 
+    // Create our first level here
     m_levelLoader = new cLevelLoader("Level0", this, m_box2DWorld);
     m_levelLoader->BuildLevel();
+
+    CreatePlayers();
 
 
     //This is the drawing section for SFML.
@@ -114,7 +115,7 @@ void cGameManager::Tick()
         }
     }
   
-    sf::View levelView = CreateLevelViewPort(48.f, 27.f);
+    sf::View levelView = CreateLevelViewPort(32.f, 18.f);
 
     // Apply the view to the window
     m_window->setView(levelView);
@@ -184,7 +185,7 @@ void cGameManager::CreatePlayers()
         b2Shape::Type::e_polygon,
         m_box2DWorld,
         sf::Vector2f(1.f, 1.f),
-        sf::Vector2f(5.f, 5.f),
+        m_levelLoader->GetPlayer1Spawn() ,
         0.0f,
         b2BodyType::b2_dynamicBody,
         &m_sprPlayer1,
@@ -199,7 +200,7 @@ void cGameManager::CreatePlayers()
         b2Shape::Type::e_polygon,
         m_box2DWorld,
         sf::Vector2f(1.f, 1.f),
-        sf::Vector2f(10.f, 5.f),
+        m_levelLoader->GetPlayer2Spawn(),
         0.0f,
         b2BodyType::b2_dynamicBody,
         &m_sprPlayer2, 

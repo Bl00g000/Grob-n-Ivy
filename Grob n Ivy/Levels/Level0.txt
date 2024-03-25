@@ -1,27 +1,18 @@
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                                              x
-x                     11111                    x
-x                                              x
-x                                              x
-x                   !                          x
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x               x              x
+x               x              x
+x               x              x
+x               x              x
+x               x              x
+x               x              x
+x               x              x
+x               x              x
+x               5              x
+x  %            5           $  x
+xxxxxxxxxxxxx44xxx33xxxxxxxxxxxx
+x               x              x
+x           #   x  @           x
+xx22xxxxxxxxxxxxxxxxxxxxxxxx11xx
+x               x              x
+x !           P x p            x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

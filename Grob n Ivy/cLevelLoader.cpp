@@ -8,7 +8,8 @@ int cLevelLoader::m_iLevelHeight;
 
 cLevelLoader::cLevelLoader(std::string _sLevel, cGameManager* _gameManager, shared_ptr<b2World> _b2World)
 {
-	m_playerSpawn = sf::Vector2f(0, 0);
+	m_player1Spawn = sf::Vector2f(5, 5);
+	m_player2Spawn = sf::Vector2f(6, 5);
 	m_b2WorldRef = _b2World;
 	m_gameManagerRef = _gameManager;
 
@@ -132,8 +133,8 @@ void cLevelLoader::BuildLevel()
 					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
 					0,
 					b2BodyType::b2_staticBody,				   	// Body type
-					&m_sprTile,									// Sprite
-					1,
+					&m_sprLever,									// Sprite
+					-1,
 					ObjectType::tileGround,
 					1.f, 0.f));
 
@@ -148,7 +149,7 @@ void cLevelLoader::BuildLevel()
 					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
 					0,
 					b2BodyType::b2_staticBody,				   	// Body type
-					&m_sprTile,									// Sprite
+					&m_sprToggleFloor,									// Sprite
 					1,
 					ObjectType::tileGround,
 					1.f, 0.f));
@@ -156,29 +157,206 @@ void cLevelLoader::BuildLevel()
 				m_toggledTiles1.push_back(testTile);
 			}
 
-			// Player spawn
-			else if (m_cLevelArray[y][x] == 'P')
+			if (m_cLevelArray[y][x] == '@')
 			{
-				m_playerSpawn = sf::Vector2f(x, y);
+				shared_ptr<cInteractable> testInteractable(new cInteractable(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprLever,									// Sprite
+					-1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_interactable2 = testInteractable;
 			}
+			if (m_cLevelArray[y][x] == '2')
+			{
+				shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprToggleFloor,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_toggledTiles2.push_back(testTile);
+			}
+
+			if (m_cLevelArray[y][x] == '#')
+			{
+				shared_ptr<cInteractable> testInteractable(new cInteractable(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprLever,									// Sprite
+					-1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_interactable3 = testInteractable;
+			}
+			if (m_cLevelArray[y][x] == '3')
+			{
+				shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprToggleFloor,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_toggledTiles3.push_back(testTile);
+			}
+
+			if (m_cLevelArray[y][x] == '$')
+			{
+				shared_ptr<cInteractable> testInteractable(new cInteractable(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprLever,									// Sprite
+					-1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_interactable4 = testInteractable;
+			}
+			if (m_cLevelArray[y][x] == '4')
+			{
+				shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprToggleFloor,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_toggledTiles4.push_back(testTile);
+			}
+
+			if (m_cLevelArray[y][x] == '%')
+			{
+				shared_ptr<cInteractable> testInteractable(new cInteractable(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprLever,									// Sprite
+					-1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_interactable5 = testInteractable;
+			}
+			if (m_cLevelArray[y][x] == '5')
+			{
+				shared_ptr<cPhysicsObject> testTile(new cPhysicsObject(m_gameManagerRef,
+					b2Shape::Type::e_polygon,
+					m_b2WorldRef,
+					sf::Vector2f(1.f, 1.f),				  	// Size
+					sf::Vector2f(x, y) + sf::Vector2f(.5f, .5f),         	// Position
+					0,
+					b2BodyType::b2_staticBody,				   	// Body type
+					&m_sprToggleFloor,									// Sprite
+					1,
+					ObjectType::tileGround,
+					1.f, 0.f));
+
+				m_toggledTiles5.push_back(testTile);
+			}
+
+			// Player spawn
+			if (m_cLevelArray[y][x] == 'P')
+			{
+				m_player1Spawn = sf::Vector2f(x, y);
+			}
+			if (m_cLevelArray[y][x] == 'p')
+			{
+				m_player2Spawn = sf::Vector2f(x, y);
+			}
+
 		}
 	}
 
 	// attach toggleable tiles to their interactables
 	m_interactable1->SetTarget(m_toggledTiles1);
+	m_interactable2->SetTarget(m_toggledTiles2);
+	m_interactable3->SetTarget(m_toggledTiles3);
+	m_interactable4->SetTarget(m_toggledTiles4);
+	m_interactable5->SetTarget(m_toggledTiles5);
 }
 
 void cLevelLoader::Tick()
 {
 	m_interactable1->Tick();
+	m_interactable2->Tick();
+	m_interactable3->Tick();
+	m_interactable4->Tick();
+	m_interactable5->Tick();
 }
 
 
 void cLevelLoader::DrawLevel(sf::RenderWindow* _window)
 {
 	m_interactable1->Draw(*_window);
+	m_interactable2->Draw(*_window);
+	m_interactable3->Draw(*_window);
+	m_interactable4->Draw(*_window);
+	m_interactable5->Draw(*_window);
 
 	for (shared_ptr<cPhysicsObject> interactObjIter : m_toggledTiles1)
+	{
+		if (!interactObjIter->GetHiddenState())
+		{
+			interactObjIter->Draw(*_window);
+		}
+	}
+	for (shared_ptr<cPhysicsObject> interactObjIter : m_toggledTiles2)
+	{
+		if (!interactObjIter->GetHiddenState())
+		{
+			interactObjIter->Draw(*_window);
+		}
+	}
+	for (shared_ptr<cPhysicsObject> interactObjIter : m_toggledTiles3)
+	{
+		if (!interactObjIter->GetHiddenState())
+		{
+			interactObjIter->Draw(*_window);
+		}
+	}
+	for (shared_ptr<cPhysicsObject> interactObjIter : m_toggledTiles4)
+	{
+		if (!interactObjIter->GetHiddenState())
+		{
+			interactObjIter->Draw(*_window);
+		}
+	}
+	for (shared_ptr<cPhysicsObject> interactObjIter : m_toggledTiles5)
 	{
 		if (!interactObjIter->GetHiddenState())
 		{
@@ -206,9 +384,21 @@ void cLevelLoader::LoadSprites()
 	{
 		std::cout << "plank not loaded" << std::endl;
 	}
+	if (!m_leverTexture.loadFromFile("Sprites/Lever.png"))
+	{
+		std::cout << "plank not loaded" << std::endl;
+	}
+	if (!m_toggleFloorTexture.loadFromFile("Sprites/toggleFloor.png"))
+	{
+		std::cout << "plank not loaded" << std::endl;
+	}
+	
+	
 
 	// Setting textures to sprite variables
 	m_sprTile.setTexture(m_groundTexture);
+	m_sprLever.setTexture(m_leverTexture);
+	m_sprToggleFloor.setTexture(m_toggleFloorTexture);
 }
 
 // Name: getPlayerSpawn
@@ -216,9 +406,19 @@ void cLevelLoader::LoadSprites()
 // Parameters: N/A
 // Returns: Vector of sf::FloatRect
 // Purpose: Returns m_playerSpawn
-sf::Vector2f cLevelLoader::GetPlayerSpawn()
+sf::Vector2f cLevelLoader::GetPlayer1Spawn()
 {
-	return m_playerSpawn;
+	return m_player1Spawn;
+}
+
+// Name: getPlayerSpawn
+// Author: Juan
+// Parameters: N/A
+// Returns: Vector of sf::FloatRect
+// Purpose: Returns m_playerSpawn
+sf::Vector2f cLevelLoader::GetPlayer2Spawn()
+{
+	return m_player2Spawn;
 }
 
 // Name: getName

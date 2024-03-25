@@ -51,46 +51,68 @@ void cPlayerCharacter::ProcessMovement()
 	{
 		if (m_bPlayer1)		// PLAYER 1 MOVEMENT CONTROLS
 		{
+			float fHorizontalMoveSpeed;
+
+			if (m_grounded)
+			{
+				fHorizontalMoveSpeed = 10;
+			}
+			else
+			{
+				fHorizontalMoveSpeed = 5;
+			}
+
 			// Move right
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
 				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
-				m_b2Body->SetLinearVelocity(b2Vec2(10.0f, m_b2Body->GetLinearVelocity().y));
+				m_b2Body->SetLinearVelocity(b2Vec2(fHorizontalMoveSpeed, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Move left
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				m_b2Body->SetLinearVelocity(b2Vec2(-10.0f, m_b2Body->GetLinearVelocity().y));
+				m_b2Body->SetLinearVelocity(b2Vec2(-fHorizontalMoveSpeed, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && m_grounded)
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -10.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -8.0f), true);
 				m_grounded = false;
 			}
 		}
 		else				// PLAYER 2 MOVEMENT CONTROLS
 		{
+			float fHorizontalMoveSpeed;
+
+			if (m_grounded)
+			{
+				fHorizontalMoveSpeed = 10;
+			}
+			else
+			{
+				fHorizontalMoveSpeed = 5;
+			}
+
 			// Move right
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			{
 				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(1.0f, 0.0f), true);
-				m_b2Body->SetLinearVelocity(b2Vec2(10.0f, m_b2Body->GetLinearVelocity().y));
+				m_b2Body->SetLinearVelocity(b2Vec2(fHorizontalMoveSpeed, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Move left
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			{
 				//m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(-1.0f, 0.0f), true);
-				m_b2Body->SetLinearVelocity(b2Vec2(-10.0f, m_b2Body->GetLinearVelocity().y));
+				m_b2Body->SetLinearVelocity(b2Vec2(-fHorizontalMoveSpeed, m_b2Body->GetLinearVelocity().y));
 			}
 
 			// Jump
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_grounded)
 			{
-				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -10.0f), true);
+				m_b2Body->ApplyLinearImpulseToCenter(b2Vec2(m_b2Body->GetLinearVelocity().x, -8.0f), true);
 				m_grounded = false;
 			}
 		}
